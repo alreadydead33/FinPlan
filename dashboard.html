@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FinPlan - Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        .progress-bar {
+            transition: width 0.5s ease-in-out;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Barra de navegação -->
+    <nav class="bg-blue-600 text-white shadow-lg">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <i class="fas fa-wallet text-2xl"></i>
+                <h1 class="text-xl font-bold">FinPlan</h1>
+            </div>
+            <div class="hidden md:flex space-x-6">
+                <a href="index.html" class="hover:text-blue-200">Início</a>
+                <a href="dashboard.html" class="hover:text-blue-200">Dashboard</a>
+                <a href="settings.html" class="hover:text-blue-200">Configurações</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Conteúdo principal -->
+    <main class="container mx-auto px-4 py-8">
+        <h2 class="text-2xl font-bold text-gray-800 mb-6">Seu Planejamento Financeiro</h2>
+        
+        <!-- Resumo -->
+        <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+            <h3 class="text-lg font-semibold text-gray-700 mb-4">Resumo do Orçamento</h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="bg-blue-50 p-4 rounded-lg">
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="font-medium text-blue-800">Necessidades</span>
+                        <span class="text-blue-600 font-bold">50%</span>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-2.5">
+                        <div id="needsProgress" class="progress-bar bg-blue-600 h-2.5 rounded-full" style="width: 0%"></div>
+                    </div>
+                    <p id="needsAmount" class="text-sm text-gray-500 mt-1">R$ 0,00</p>
+                </div>
+                
+                <div class="bg-green-50 p-4 rounded-lg">
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="font-medium text-green-800">Desejos</span>
+                        <span class="text-green-600 font-bold">30%</span>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-2.5">
+                        <div id="wantsProgress" class="progress-bar bg-green-600 h-2.5 rounded-full" style="width: 0%"></div>
+                    </div>
+                    <p id="wantsAmount" class="text-sm text-gray-500 mt-1">R$ 0,00</p>
+                </div>
+                
+                <div class="bg-purple-50 p-4 rounded-lg">
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="font-medium text-purple-800">Poupança</span>
+                        <span class="text-purple-600 font-bold">20%</span>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-2.5">
+                        <div id="savingsProgress" class="progress-bar bg-purple-600 h-2.5 rounded-full" style="width: 0%"></div>
+                    </div>
+                    <p id="savingsAmount" class="text-sm text-gray-500 mt-1">R$ 0,00</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Sugestões -->
+        <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+            <h3 class="text-lg font-semibold text-gray-700 mb-4">Sugestões Inteligentes</h3>
+            <ul id="suggestionsList" class="space-y-3">
+                <!-- As sugestões serão adicionadas dinamicamente via JavaScript -->
+            </ul>
+        </div>
+
+        <!-- Exportar e Investimentos -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <h3 class="text-lg font-semibold text-gray-700 mb-4">Exportar Dados</h3>
+                <button id="exportBtn" 
+                        class="w-full bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700 transition">
+                    <i class="fas fa-file-excel mr-2"></i> Exportar para Excel
+                </button>
+            </div>
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <h3 class="text-lg font-semibold text-gray-700 mb-4">Investimentos</h3>
+                <a href="investment.html" 
+                   class="w-full inline-block text-center bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition">
+                    <i class="fas fa-chart-line mr-2"></i> Ver Investimentos
+                </a>
+            </div>
+        </div>
+
+        <!-- Registro de Gastos -->
+        <div class="bg-white rounded-lg shadow-md p-6">
+            <h3 class="text-lg font-semibold text-gray-700 mb-4">Registrar Gastos</h3>
+            <form id="expenseForm" class="space-y-4">
+                <div>
+                    <label for="expenseCategory" class="block text-sm font-medium text-gray-700 mb-1">Categoria</label>
+                    <select id="expenseCategory" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                        <option value="needs">Necessidades</option>
+                        <option value="wants">Desejos</option>
+                        <option value="savings">Poupança</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="expenseAmount" class="block text-sm font-medium text-gray-700 mb-1">Valor (R$)</label>
+                    <input type="number" id="expenseAmount" step="0.01" required 
+                           class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                </div>
+                <button type="submit" 
+                        class="w-full bg-red-600 text-white py-2 px-4 rounded-md hover:bg-red-700 transition">
+                    <i class="fas fa-save mr-2"></i> Registrar Gasto
+                </button>
+            </form>
+        </div>
+    </main>
+
+    <script src="main.js"></script>
+</body>
+</html>
